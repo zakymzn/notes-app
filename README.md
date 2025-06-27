@@ -1,6 +1,7 @@
 # Notes App
 
 Sebuah aplikasi catatan sederhana berbasis web yang menggunakan:
+
 - ⚙️ Backend: Express.js + MariaDB
 - 🌐 Frontend: React + Vite + TypeScript
 - 🔐 Fitur: Login, Register, CRUD Catatan, Pencarian Catatan, dan Autentikasi JWT
@@ -56,14 +57,13 @@ npm install
 
 Salin dari `.env.example` dan sesuaikan jika perlu
 
-
 ### 4. Jalankan server
 
 ```bash
 npm run dev
 ```
 
-Server akan berjalan di http://localhost:3000
+Server akan berjalan di <http://localhost:3000>
 
 ## 🌐 Setup Frontend
 
@@ -85,11 +85,11 @@ npm install
 npm run dev
 ```
 
-Akses melalui http://localhost:5173
+Akses melalui <http://localhost:5173>
 
 ## 🔐 Login Demo
 
 Gunakan akun dummy berikut:
-- Email: `zaky@mail.com`
-- Password: `zakypass`
 
+- Email: `zaky@email.com`
+- Password: `zakypass`

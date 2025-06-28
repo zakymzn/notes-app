@@ -17,6 +17,7 @@ function NotesPage() {
   const [editMode, setEditMode] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [error, setError] = useState("");
+  const [showButton, setShowButton] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,6 +31,22 @@ function NotesPage() {
       }
     };
     fetchNotes();
+  }, []);
+
+  useEffect(() => {
+    const handleScrollButtonVisibility = () => {
+      if (window.pageYOffset > 100) { // Show button after scrolling 300px down
+        setShowButton(true);
+      } else {
+        setShowButton(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScrollButtonVisibility);
+
+    return () => {
+      window.removeEventListener('scroll', handleScrollButtonVisibility);
+    };
   }, []);
 
   const resetForm = () => {
@@ -117,7 +134,7 @@ function NotesPage() {
         )
       }
       <div className={editMode ? "blur-sm" : ""}>
-        <nav className="border-b border-gray-300 p-4 flex justify-between items-center sticky top-0 bg-white">
+        <nav id="navbar" className="border-b border-gray-300 p-4 flex justify-between items-center sticky top-0 bg-white">
           <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" /></svg>
 
           <input type="text" name="search" placeholder="Cari catatan..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="block w-full border border-gray-300 rounded-full mx-4 px-3 py-2" />
@@ -170,10 +187,19 @@ function NotesPage() {
             )}
           </div>
         </div>
-
-        <a href="#notes-list" className="fixed bottom-4 right-4 p-4 rounded-full border border-gray-300 bg-white shadow-lg transition-all duration-200 hover:bg-black hover:fill-white hover:cursor-pointer hover:animate-pulse">
+        {
+          top && (
+            <></>
+          )
+        }
+        <button onClick={() => {
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          })
+        }} className={`${showButton ? '' : 'hidden'} fixed bottom-4 right-4 p-4 rounded-full border border-gray-300 bg-white shadow-lg transition-all duration-200 hover:bg-black hover:fill-white hover:cursor-pointer hover:animate-pulse`}>
           <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"><path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z" /></svg>
-        </a>
+        </button>
       </div>
     </>
   );

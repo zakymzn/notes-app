@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
+import { Link } from "react-router-dom";
 
 interface Note {
   id: number;
@@ -35,7 +36,7 @@ function NotesPage() {
 
   useEffect(() => {
     const handleScrollButtonVisibility = () => {
-      if (window.pageYOffset > 100) { // Show button after scrolling 300px down
+      if (window.pageYOffset > 100) {
         setShowButton(true);
       } else {
         setShowButton(false);
@@ -55,8 +56,7 @@ function NotesPage() {
     setEditNote(null)
   }
 
-  const handleSubmitNote = async (e: React.FormEvent) => {
-    // e.preventDefault();
+  const handleSubmitNote = async () => {
     if (editNote !== null) {
       try {
         const res = await api.put(`/notes/${editNote}`, { title, content })
@@ -93,7 +93,7 @@ function NotesPage() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    navigate("/login");
+    navigate("/");
   };
 
   return (
@@ -103,7 +103,7 @@ function NotesPage() {
           <div id="add-note" className="fixed sm:w-2/3 md:w-2/3 lg:w-1/2 top-0 bottom-0 right-0 left-0 place-self-center p-6 border border-gray-300 bg-white rounded-xl shadow-lg z-[999]">
             <form onSubmit={handleSubmitNote}>
               <div className="flex flex-row justify-between">
-                <h4 className="text-3xl font-bold mb-4">Buat Catatan Baru</h4>
+                <h4 className="text-3xl font-bold mb-4">{editNote ? "Edit Catatan" : "Buat Catatan Baru"}</h4>
               </div>
               <input type="text" name="title" placeholder="Judul" required value={title} onChange={(e) => setTitle(e.target.value)} className="mt-2 block w-full border border-gray-300 rounded-full px-3 py-2" />
               <textarea name="content" rows={10} placeholder="Tulis catatan..." required value={content} onChange={(e) => setContent(e.target.value)} className="mt-4 block w-full border border-gray-300 rounded-xl px-3 py-2" />
@@ -134,8 +134,10 @@ function NotesPage() {
         )
       }
       <div className={editMode ? "blur-sm" : ""}>
-        <nav id="navbar" className="border-b border-gray-300 p-4 flex justify-between items-center sticky top-0 bg-white">
-          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" /></svg>
+        <nav className="border-b border-gray-300 p-4 flex justify-between items-center sticky top-0 bg-white">
+          <Link to={"/"} className="ml-4">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"><path d="m142-480 294 294q15 15 14.5 35T435-116q-15 15-35 15t-35-15L57-423q-12-12-18-27t-6-30q0-15 6-30t18-27l308-308q15-15 35.5-14.5T436-844q15 15 15 35t-15 35L142-480Z" /></svg>
+          </Link>
 
           <input type="text" name="search" placeholder="Cari catatan..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="block w-full border border-gray-300 rounded-full mx-4 px-3 py-2" />
 
@@ -187,17 +189,12 @@ function NotesPage() {
             )}
           </div>
         </div>
-        {
-          top && (
-            <></>
-          )
-        }
         <button onClick={() => {
           window.scrollTo({
             top: 0,
             behavior: 'smooth'
           })
-        }} className={`${showButton ? '' : 'hidden'} fixed bottom-4 right-4 p-4 rounded-full border border-gray-300 bg-white shadow-lg transition-all duration-200 hover:bg-black hover:fill-white hover:cursor-pointer hover:animate-pulse`}>
+        }} className={`${showButton ? '' : 'hidden'} fixed bottom-4 right-4 p-4 rounded-full bg-white shadow-lg transition-all duration-200 hover:bg-black hover:fill-white hover:cursor-pointer hover:animate-pulse`}>
           <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"><path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z" /></svg>
         </button>
       </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 import { Link } from "react-router-dom";
@@ -161,10 +161,10 @@ function NotesPage() {
                 {notes
                   .filter((note) => note.title.toLowerCase().includes(searchTerm.toLowerCase()) || note.content.toLowerCase().includes(searchTerm.toLowerCase()))
                   .map((note) => (
-                    <li key={note.id} className="border border-gray-300 flex flex-col justify-between rounded-xl p-6 shadow-lg">
+                    <li key={note.id} className="bg-white border border-gray-300 flex flex-col justify-between rounded-xl p-6 shadow-lg hover:scale-105 transition-all">
                       <div>
                         <h4 className="text-xl font-semibold pb-2 border-b border-gray-300">{note.title}</h4>
-                        <small>{new Date(note.createdAt).toLocaleString()}</small>
+                        <small>{new Date(note.createdAt).toLocaleString("id", { dateStyle: "full", timeStyle: "short" })}</small>
                         <p className="my-4 line-clamp-4">{note.content}</p>
                       </div>
                       <div className="flex space-x-2 mt-4">
